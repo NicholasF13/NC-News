@@ -3,6 +3,7 @@ const request = require('supertest')
 const db = require('./db/connection')
 const seed = require('./db/seeds/seed')
 const data = require('./db/data/test-data')
+const endpointsData = require('./endpoints.json')
 
 beforeEach(() => {
     return seed(data)
@@ -31,6 +32,17 @@ describe("GET /api/topics", () => {
     }) 
 })
 
+describe("GET /api", () => {
+  test("Should respond with an accurate JSON object representing all available endpoints", () => {
+    return request(app)
+    .get('/api')
+    .expect(200)
+    .then(({body}) => {
+      const endpoints = body
+      expect(endpoints).toEqual(endpointsData)       
+    })
+  })
+})
 
 test("handles API endpoint not found (404)", () => {
   return request(app)
