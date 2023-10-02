@@ -28,10 +28,13 @@ describe("GET /api/topics", () => {
             expect(typeof topic.description).toBe("string")
           })
         }) 
-    })
-    test("handles API endpoint not found (404)", () => {
-        return request(app)
-          .get("/api/nonexistentendpoint")
-          .expect(404)
     }) 
 })
+
+
+test("handles API endpoint not found (404)", () => {
+  return request(app)
+    .get("/api/nonexistentendpoint")
+    .expect(404)
+}) 
+
