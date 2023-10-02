@@ -13,5 +13,9 @@ app.use((err, req, res, next) => {
     res.status(500).send({ error: 'Internal Server Error' })
   })
   
+app.all('/*', (req, res, next) => {
+    console.log('hello')
+    res.status(404).send({ error: 'Invlaid endpoint'})
+}) 
 
 module.exports = app

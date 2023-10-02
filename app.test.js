@@ -44,6 +44,7 @@ describe("GET /api", () => {
   })
 })
 
+
 test("handles API endpoint not found (404)", () => {
   return request(app)
     .get("/api/nonexistentendpoint")
