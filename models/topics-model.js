@@ -4,4 +4,4 @@ function selectTopics(){
     return db.query(`SELECT * FROM topics;`)
 }
 
-module.exports = selectTopics
+module.exports = {selectTopics}
