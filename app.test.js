@@ -44,9 +44,49 @@ describe("GET /api", () => {
   })
 })
 
-test("handles API endpoint not found (404)", () => {
-  return request(app)
-    .get("/api/nonexistentendpoint")
-    .expect(404)
-}) 
+
+describe("/api/articles/:article_id", () => {
+  test("return an article object with the correct properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+    
+        expect(body.article).toHaveProperty("author")
+        expect(body.article).toHaveProperty("title")
+        expect(body.article).toHaveProperty("article_id")
+        expect(body.article).toHaveProperty("body")
+        expect(body.article).toHaveProperty("topic")
+        expect(body.article).toHaveProperty("created_at")
+        expect(body.article).toHaveProperty("votes")
+        expect(body.article).toHaveProperty("article_img_url")
+      })
+  })
+  test("returns an article with the correct id", () => {
+    return request(app)
+    .get("/api/articles/3")
+    .expect(200)
+    .then(({body}) => {
+      const {article_id} = body.article
+      expect(article_id).toBe(3)
+    })
+  })
+  test('GET:404 sends an appropriate status and error message when given a valid but non-existent id', () => {
+    return request(app)
+      .get('/api/articles/999')
+      .expect(404)
+      .then(({body}) => {
+        expect(body.message).toBe('Article does not exist')
+      })
+  })
+  test('GET:400 sends an appropriate status and error message when given an invalid id', () => {
+    return request(app)
+      .get('/api/articles/invalidarticle')
+      .expect(400)
+      .then(({body}) => {
+        expect(body.message).toBe('Bad request')
+      })
+  })
+})
+
 
