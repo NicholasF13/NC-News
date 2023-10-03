@@ -12,4 +12,8 @@ function selectArticleById(articleId){
     })
 }
 
-module.exports = {selectArticleById}
+function selectArticles(){
+
+}
+
+module.exports = {selectArticleById, selectArticles}
