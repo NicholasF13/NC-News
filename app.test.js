@@ -4,6 +4,7 @@ const db = require('./db/connection')
 const seed = require('./db/seeds/seed')
 const data = require('./db/data/test-data')
 const endpointsData = require('./endpoints.json')
+const jestSorted = require('jest-sorted')
 
 beforeEach(() => {
     return seed(data)
@@ -51,7 +52,6 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body)
         expect(body.article).toHaveProperty("author")
         expect(body.article).toHaveProperty("title")
         expect(body.article).toHaveProperty("article_id")
@@ -90,5 +90,31 @@ describe("/api/articles/:article_id", () => {
 })
 
 describe("/api/articles", () => {
-
+  test("returns an array of article objects with the correct properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({body}) => {
+        const articles = body.articles
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("author")
+          expect(article).toHaveProperty("title")
+          expect(article).toHaveProperty("article_id")
+          expect(article).toHaveProperty("topic")
+          expect(article).toHaveProperty("created_at")
+          expect(article).toHaveProperty("votes")
+          expect(article).toHaveProperty("article_img_url")
+          expect(article).toHaveProperty("comment_count")
+        })
+      })
+  })
+  test("returns an array of article objects with the objects sorted by date, in descending order", () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(({body}) => {
+      const articles = body.articles
+      expect(articles).toBeSortedBy("created_at", {descending: true});
+    });
+  })
 })

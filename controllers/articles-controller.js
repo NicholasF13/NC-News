@@ -9,13 +9,19 @@ function getArticleById(req, res, next){
         res.status(200).send({article})
     })
     .catch((err) => {
-        console.log(err)
         next(err)
     })
 }
 
 function getArticles(req, res, next){
-
+    
+    selectArticles()
+    .then((articles) => {
+        res.status(200).send({articles: articles.rows})
+    })
+    .catch((err) => {
+        next(err)
+    })
 }
 
 module.exports = {getArticleById, getArticles}
