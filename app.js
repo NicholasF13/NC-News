@@ -14,8 +14,8 @@ app.get("/api/articles/:article_id", getArticleById)
 app.use((err, req, res, next) => {
     console.error(err)
 
-    if (err.code === '42703'){
-      res.status(400).send({message: 'Bad request'})
+    if (err.status){
+      res.status(err.status).send({message: err.message})
     } else {
     res.status(500).send({ message: 'Internal Server Error' })
     }

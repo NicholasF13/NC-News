@@ -75,18 +75,16 @@ describe("/api/articles/:article_id", () => {
     return request(app)
       .get('/api/articles/999')
       .expect(404)
-      .then((response) => {
-        const messageObject = JSON.parse(response.text)
-        expect(messageObject.message).toBe('Article does not exist')
+      .then(({body}) => {
+        expect(body.message).toBe('Article does not exist')
       })
   })
   test('GET:400 sends an appropriate status and error message when given an invalid id', () => {
     return request(app)
       .get('/api/articles/invalidarticle')
       .expect(400)
-      .then((response) => {
-        const messageObject = JSON.parse(response.text)
-        expect(messageObject.message).toBe('Bad request')
+      .then(({body}) => {
+        expect(body.message).toBe('Bad request')
       })
   })
 })
