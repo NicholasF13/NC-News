@@ -4,7 +4,6 @@ const db = require('./db/connection')
 const seed = require('./db/seeds/seed')
 const data = require('./db/data/test-data')
 const endpointsData = require('./endpoints.json')
-const jestSorted = require('jest-sorted')
 
 beforeEach(() => {
     return seed(data)
@@ -96,6 +95,7 @@ describe("/api/articles", () => {
       .expect(200)
       .then(({body}) => {
         const articles = body.articles
+        expect(articles).toHaveLength(13)
         articles.forEach((article) => {
           expect(article).toHaveProperty("author")
           expect(article).toHaveProperty("title")

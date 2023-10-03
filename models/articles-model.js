@@ -36,6 +36,9 @@ function selectArticles(){
     articles.article_img_url
     ORDER BY
     articles.created_at DESC;`)
+    .then(({rows}) => {
+        return rows
+    })
 }
 
 module.exports = {selectArticleById, selectArticles}

@@ -16,8 +16,8 @@ function getArticleById(req, res, next){
 function getArticles(req, res, next){
     
     selectArticles()
-    .then((articles) => {
-        res.status(200).send({articles: articles.rows})
+    .then((articleData) => {
+        res.status(200).send({articles: articleData})
     })
     .catch((err) => {
         next(err)
