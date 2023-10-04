@@ -24,4 +24,8 @@ function getArticles(req, res, next){
     })
 }
 
-module.exports = {getArticleById, getArticles}
+function getCommentsById (req, res, next){
+
+}
+
+module.exports = {getArticleById, getArticles, getCommentsById}
