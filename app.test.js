@@ -45,7 +45,7 @@ describe("GET /api", () => {
 })
 
 
-describe("/api/articles/:article_id", () => {
+describe("GET/api/articles/:article_id", () => {
   test("return an article object with the correct properties", () => {
     return request(app)
       .get("/api/articles/1")
@@ -88,7 +88,7 @@ describe("/api/articles/:article_id", () => {
   })
 })
 
-describe("/api/articles", () => {
+describe("GET /api/articles", () => {
   test("returns an array of article objects with the correct properties", () => {
     return request(app)
       .get("/api/articles")
@@ -120,7 +120,7 @@ describe("/api/articles", () => {
 })
 
 
-describe("/api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("returns an array of comment objects with the correct properties", () => {
       return request(app)
       .get("/api/articles/1/comments")
@@ -176,6 +176,72 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({body}) => {
         expect(body.message).toBe('Bad request')
+      })
+  })
+})
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("adds a comment for an article", () => {
+
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'Hello World'
+    }
+
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(201)
+    .then(({body}) => {
+      const comment = body.comment[0]
+      expect(comment).toHaveProperty("comment_id", expect.any(Number))
+      expect(comment).toHaveProperty("votes", expect.any(Number))
+      expect(comment).toHaveProperty("author", newComment.username)
+      expect(comment).toHaveProperty("body", newComment.body)
+      expect(comment).toHaveProperty("created_at", expect.any(String))
+      expect(comment).toHaveProperty("article_id", 1)
+    }) 
+  })
+  test('sends an appropriate 404 status and error message when given a valid but non-existent article id', () => {
+    return request(app)
+      .post('/api/articles/999/comments')
+      .expect(404)
+      .then(({body}) => {
+        expect(body.message).toBe('Article does not exist')
+      })
+  })
+  test('sends an appropriate 400 status and error message when given an invalid article id', () => {
+    return request(app)
+      .post('/api/articles/invalidarticle/comments')
+      .expect(400)
+      .then(({body}) => {
+        expect(body.message).toBe('Bad request')
+      })
+  })
+  test('sends an appropriate 400 status and error message when body is missing', () => {
+    const invalidComment = {
+      username: 'butter_bridge'
+    }
+
+    return request(app)
+      .post('/api/articles/1/comments')
+      .send(invalidComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe('Missing body or username')
+      })
+  })
+  test('sends an appropriate 400 status and error message when username is missing', () => {
+    const invalidComment = {
+      body: 'Hello World'
+    }
+
+    return request(app)
+      .post('/api/articles/1/comments')
+      .send(invalidComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe('Missing body or username')
       })
   })
 })

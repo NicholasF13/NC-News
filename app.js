@@ -1,9 +1,11 @@
 const express = require('express')
 const {getTopics} = require('./controllers/topics-controller')
 const {getEndpoints} = require('./controllers/endpoints-controller')
-const {getArticleById, getArticles, getCommentsById} = require('./controllers/articles-controller')
+const {getArticleById, getArticles, getCommentsById, postComment} = require('./controllers/articles-controller')
 
 const app = express()
+
+app.use(express.json())
 
 app.get('/api/topics', getTopics)
 
@@ -15,15 +17,18 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentsById)
 
-
+app.post("/api/articles/:article_id/comments", postComment)
 
 app.use((err, req, res, next) => {
     console.error(err)
 
     if (err.code === '42703'){
       res.status(400).send({message: 'Bad request'})
-
-    } else if (err.status){
+    } else if (err.code === '23502') {
+      res.status(400).send({message: 'Missing body or username'})
+    }
+    
+    else if (err.status){
       res.status(err.status).send({message: err.message})
       
     } else {

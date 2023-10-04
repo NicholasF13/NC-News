@@ -56,4 +56,33 @@ function selectCommentsById (articleId){
     })
 }
 
-module.exports = {selectArticleById, selectArticles, selectCommentsById}
+function insertComment (newComment, articleId) {
+
+    return selectArticleById(articleId) //returns promise.reject if non-existant id
+    .then(() => {
+
+    const { username, body } = newComment;
+
+    const currentDate = new Date();
+    const createdAt = currentDate.toISOString();
+  
+    const queryStr = `
+      INSERT INTO comments
+      (votes, author, body, created_at, article_id)
+      VALUES
+      ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+  
+    const queryValues = [0, username, body, createdAt, articleId];
+  
+    return db.query(queryStr, queryValues)
+    .then(({rows}) => {
+    
+        return rows
+    })
+})
+}
+
+
+module.exports = {selectArticleById, selectArticles, selectCommentsById, insertComment}
