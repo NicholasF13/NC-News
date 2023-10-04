@@ -120,3 +120,62 @@ describe("/api/articles", () => {
 })
 
 
+describe("/api/articles/:article_id/comments", () => {
+  test("returns an array of comment objects with the correct properties", () => {
+      return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({body}) => {
+        const comments = body.comments
+        expect(comments).toHaveLength(11)
+        comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id")
+          expect(comment).toHaveProperty("votes")
+          expect(comment).toHaveProperty("created_at")
+          expect(comment).toHaveProperty("author")
+          expect(comment).toHaveProperty("body")
+          expect(comment).toHaveProperty("article_id")
+        })
+      })
+  })
+  test("checks all comment id's match the endpoint article id", () => {
+    const articleId = 1
+
+    return request(app)
+    .get(`/api/articles/${articleId}/comments`)
+    .expect(200)
+    .then(({body}) => {
+      const comments = body.comments
+      expect(comments).toHaveLength(11)
+      comments.forEach((comment) => {
+        expect(comment.article_id).toBe(articleId)
+      })
+
+    })
+  })
+  test("returns an array of comment objects with the objects sorted by date, in descending order", () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({body}) => {
+      const comments = body.comments
+      expect(comments).toBeSortedBy("created_at", {descending: true});
+    });
+  })
+  test('GET:404 sends an appropriate status and error message when given a valid but non-existent article id', () => {
+    return request(app)
+      .get('/api/articles/999/comments')
+      .expect(404)
+      .then(({body}) => {
+        expect(body.message).toBe('Article does not exist')
+      })
+  })
+  test('GET:400 sends an appropriate status and error message when given an invalid article id', () => {
+    return request(app)
+      .get('/api/articles/invalidarticle/comments')
+      .expect(400)
+      .then(({body}) => {
+        expect(body.message).toBe('Bad request')
+      })
+  })
+})
