@@ -129,12 +129,12 @@ describe("/api/articles/:article_id/comments", () => {
         const comments = body.comments
         expect(comments).toHaveLength(11)
         comments.forEach((comment) => {
-          expect(comment).toHaveProperty("comment_id")
-          expect(comment).toHaveProperty("votes")
-          expect(comment).toHaveProperty("created_at")
-          expect(comment).toHaveProperty("author")
-          expect(comment).toHaveProperty("body")
-          expect(comment).toHaveProperty("article_id")
+          expect(comment).toHaveProperty("comment_id", expect.any(Number))
+          expect(comment).toHaveProperty("votes", expect.any(Number))
+          expect(comment).toHaveProperty("created_at", expect.any(String))
+          expect(comment).toHaveProperty("author", expect.any(String))
+          expect(comment).toHaveProperty("body", expect.any(String))
+          expect(comment).toHaveProperty("article_id", expect.any(Number))
         })
       })
   })

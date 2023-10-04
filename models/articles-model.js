@@ -43,25 +43,8 @@ function selectArticles(){
 
 function selectCommentsById (articleId){
     return db.query(`
-    SELECT
-    comments.comment_id,
-    comments.votes,
-    comments.created_at,
-    comments.author,
-    comments.body,
-    comments.article_id
-    FROM 
-    comments
-    JOIN
-    articles ON comments.article_id = articles.article_id
+    SELECT * FROM comments
     WHERE comments.article_id = ${articleId}
-    GROUP BY
-    comments.comment_id,
-    comments.votes,
-    comments.created_at,
-    comments.author,
-    comments.body,
-    comments.article_id
     ORDER BY
     comments.created_at DESC;`)
     .then(({rows}) => {
