@@ -42,5 +42,21 @@
         "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+  "GET /api/articles/:articleid/comments": {
+    "description": "serves an array of all comments for a specific article ID",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment id": 3,
+          "votes": 5,
+          "author": "weegembump",
+          "body": "I find this existence challenging" ,
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "article_id": 1
+        }
+      ]
+    }
   }
 }

@@ -41,4 +41,19 @@ function selectArticles(){
     })
 }
 
-module.exports = {selectArticleById, selectArticles}
+function selectCommentsById (articleId){
+    return db.query(`
+    SELECT * FROM comments
+    WHERE comments.article_id = ${articleId}
+    ORDER BY
+    comments.created_at DESC;`)
+    .then(({rows}) => {
+        if(rows.length !== 0){
+            return rows
+        }else {
+            return Promise.reject({ status: 404, message: 'Article does not exist' })
+        }
+    })
+}
+
+module.exports = {selectArticleById, selectArticles, selectCommentsById}
