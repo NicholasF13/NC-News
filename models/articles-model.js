@@ -13,6 +13,13 @@ function selectArticleById(articleId){
 }
 
 function selectArticles(topic){
+
+    const validTopics = ['mitch', 'cats', 'paper']
+
+    if(topic && !validTopics.includes(topic)){
+        return Promise.reject({status: 404, message: 'Topic not found'})
+    }
+
     let queryStr =`
     SELECT
     articles.author,
@@ -48,17 +55,13 @@ function selectArticles(topic){
   let queryValues;
 
     if (topic) {
-    queryValues = [topic];
+    queryValues = [topic]
     } else {
-    queryValues = [];
+    queryValues = []
     }
 
     return db.query(queryStr, queryValues)
     .then(({rows}) => {
-
-        if(topic && rows.length === 0){
-            return Promise.reject({status: 404, message: 'Topic not found'})
-        }
         return rows
     })
 

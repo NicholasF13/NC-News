@@ -419,6 +419,16 @@ describe("GET /api/articles with topic query", () => {
         })
       })
   })
+  test("returns a status of 200 and an empty array if passed a topic with no associated articles", () => {
+
+    return request(app)
+      .get(`/api/articles?topic=paper`)
+      .expect(200)
+      .then(({ body }) => {
+        const articles =body.articles
+        expect(articles).toHaveLength(0)
+      })
+  })
   test("returns 400 and error message for invalid topic query parameter", () => {
 
     return request(app)
