@@ -377,3 +377,22 @@ describe("DELETE /api/comments/:comment_id", () => {
       })
   })
 })
+
+describe("GET /api/users", () => {
+  test("returns status of code 200 when a request is made to this endpoint", () => {
+    return request(app).get("/api/users").expect(200);
+})
+test("Returns users with the correct format", () => {
+    return request(app)
+    .get('/api/users')
+    .then(({body}) => {
+      const users = body.users
+      expect(users).toHaveLength(4)
+      users.forEach((user) => {
+        expect(user).toHaveProperty("username", expect.any(String))
+        expect(user).toHaveProperty("name", expect.any(String))
+        expect(user).toHaveProperty("avatar_url", expect.any(String))
+      })
+    }) 
+}) 
+})
