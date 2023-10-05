@@ -24,7 +24,7 @@ app.patch('/api/articles/:article_id', updateArticle)
 app.use((err, req, res, next) => {
     console.error(err)
 
-    if (err.code === '42703'|| err.code === '22P02'){
+    if (err.code === '42703' || err.code === '22P02'){
       res.status(400).send({message: 'Bad request'})
       
     } else if (err.code === '23502') {

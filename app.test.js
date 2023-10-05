@@ -322,24 +322,26 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.message).toBe("Bad request")
       })
   })
-  test("sends an appropriate 400 status and error message when request body is missing", () => {
-      return request(app)
-        .patch("/api/articles/1")
-        
-        .expect(400)
-        .then(({ body }) => {
-          expect(body.message).toBe("Bad request");
-        })
-    })
-  test("sends an appropriate 400 status and error message when provided object has an incorrect key", () => {
+  test("sends an appropriate 200 status without changing the original votes key when provided an incorrect key in the request body", () => {
       const invalidRequestBody = { incorrect_key: 10 };
   
       return request(app)
         .patch("/api/articles/1")
         .send(invalidRequestBody)
-        .expect(400)
+        .expect(200)
         .then(({ body }) => {
-          expect(body.message).toBe("Bad request");
+          expect(body.article.votes).toBe(100)
+        })
+    })
+    test("sends an appropriate 200 status without changing the original votes key when provided an invalid data type in the request body", () => {
+      const invalidVotes = { inc_votes: "invalid" };
+  
+      return request(app)
+        .patch("/api/articles/1")
+        .send(invalidVotes)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.votes).toBe(100)
         });
     });
 })

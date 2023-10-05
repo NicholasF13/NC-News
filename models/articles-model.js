@@ -95,7 +95,14 @@ function updateArticleVotes (articleId, incVotes){
 
         const currentVotes = rows[0].votes
 
-        const updatedVotes = currentVotes + incVotes
+        let incVotesCheck
+        if(typeof incVotes === 'number'){
+            incVotesCheck = incVotes
+        }else {
+            incVotesCheck = 0
+        }
+
+        const updatedVotes = currentVotes + incVotesCheck
 
         return db.query(`UPDATE articles
                          SET votes = $1 
