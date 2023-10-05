@@ -86,5 +86,34 @@ function insertComment (newComment, articleId) {
 })
 }
 
+function updateArticleVotes (articleId, incVotes){
+    return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [articleId])
+    .then(({rows}) => {
+        if (rows.length === 0){
+            return Promise.reject({status: 404, message: 'Article does not exist'})
+        }
 
-module.exports = {selectArticleById, selectArticles, selectCommentsById, insertComment}
+        const currentVotes = rows[0].votes
+
+        let incVotesCheck
+        if(typeof incVotes === 'number'){
+            incVotesCheck = incVotes
+        }else {
+            incVotesCheck = 0
+        }
+
+        const updatedVotes = currentVotes + incVotesCheck
+
+        return db.query(`UPDATE articles
+                         SET votes = $1 
+                         WHERE article_id = $2
+                         RETURNING *;`,
+                         [updatedVotes, articleId])
+                         .then(({rows}) => {
+                            return rows[0]
+                         })
+    })
+}
+
+
+module.exports = {selectArticleById, selectArticles, selectCommentsById, insertComment, updateArticleVotes}
