@@ -56,4 +56,35 @@ function selectCommentsById (articleId){
     })
 }
 
-module.exports = {selectArticleById, selectArticles, selectCommentsById}
+function insertComment (newComment, articleId) {
+
+    return selectArticleById(articleId) //returns promise.reject if non-existant id
+    .then(() => {
+
+    if(Object.keys(newComment).length > 2)return Promise.reject({status:400, message: "Invalid keys in the request body"})
+
+    const { username, body } = newComment;
+
+    const currentDate = new Date().toISOString()
+    
+  
+    const queryStr = `
+      INSERT INTO comments
+      (author, body, created_at, article_id)
+      VALUES
+      ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+  
+    const queryValues = [username, body, currentDate, articleId];
+  
+    return db.query(queryStr, queryValues)
+    .then(({rows}) => {
+    
+        return rows
+    })
+})
+}
+
+
+module.exports = {selectArticleById, selectArticles, selectCommentsById, insertComment}
