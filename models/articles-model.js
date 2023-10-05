@@ -96,7 +96,8 @@ function updateArticleVotes (articleId, incVotes){
         const currentVotes = rows[0].votes
 
         let incVotesCheck
-        if(typeof incVotes === 'number'){
+        
+        if(incVotes){
             incVotesCheck = incVotes
         }else {
             incVotesCheck = 0
@@ -114,6 +115,7 @@ function updateArticleVotes (articleId, incVotes){
                          })
     })
 }
+
 
 
 module.exports = {selectArticleById, selectArticles, selectCommentsById, insertComment, updateArticleVotes}

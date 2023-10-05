@@ -330,18 +330,50 @@ describe("PATCH /api/articles/:article_id", () => {
         .send(invalidRequestBody)
         .expect(200)
         .then(({ body }) => {
-          expect(body.article.votes).toBe(100)
+          const updatedArticle = body.article
+          expect(updatedArticle).toHaveProperty("votes", 100)
+          expect(updatedArticle).toHaveProperty("author", expect.any(String))
+          expect(updatedArticle).toHaveProperty("title", expect.any(String))
+          expect(updatedArticle).toHaveProperty("article_id", expect.any(Number))
+          expect(updatedArticle).toHaveProperty("body", expect.any(String))
+          expect(updatedArticle).toHaveProperty("topic", expect.any(String))
+          expect(updatedArticle).toHaveProperty("created_at", expect.any(String))
+          expect(updatedArticle).toHaveProperty("article_img_url", expect.any(String))
         })
     })
-    test("sends an appropriate 200 status without changing the original votes key when provided an invalid data type in the request body", () => {
+    test("sends an appropriate 400 status and error message when given an invalid data type for votes in the request body", () => {
       const invalidVotes = { inc_votes: "invalid" };
   
       return request(app)
         .patch("/api/articles/1")
         .send(invalidVotes)
-        .expect(200)
+        .expect(400)
         .then(({ body }) => {
-          expect(body.article.votes).toBe(100)
-        });
-    });
+          expect(body.message).toBe("Bad request")
+        })
+    })
+})
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test('deletes a comment by comment_id and responds with 204', () => {
+    return request(app)
+      .delete('/api/comments/1') 
+      .expect(204)
+  })
+  test('responds with 404 when trying to delete a non-existent comment', () => {
+    return request(app)
+      .delete('/api/comments/999') 
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe('Comment not found')
+      })
+  })
+  test('sends an appropriate 400 status and error message when provided an invalid comment_id', () => {
+    return request(app)
+      .delete('/api/comments/nonexistentcomment')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe('Bad request')
+      })
+  })
 })
