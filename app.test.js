@@ -261,3 +261,85 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 })
 
+describe("PATCH /api/articles/:article_id", () => {
+  test("updates an articles votes with a positive value", () =>{
+    const newVotes = { inc_votes: 10 }
+
+    return request(app)
+    .patch("/api/articles/1")
+    .send(newVotes)
+    .expect(200)
+    .then(({body}) => {
+      const updatedArticle = body.article
+      expect(updatedArticle).toHaveProperty("votes", 110)
+      expect(updatedArticle).toHaveProperty("author", expect.any(String))
+      expect(updatedArticle).toHaveProperty("title", expect.any(String))
+      expect(updatedArticle).toHaveProperty("article_id", expect.any(Number))
+      expect(updatedArticle).toHaveProperty("body", expect.any(String))
+      expect(updatedArticle).toHaveProperty("topic", expect.any(String))
+      expect(updatedArticle).toHaveProperty("created_at", expect.any(String))
+      expect(updatedArticle).toHaveProperty("article_img_url", expect.any(String))
+    })
+  })
+  test("updates an article's votes with negative value", () => {
+    const updatedVotes = { inc_votes: -5 };
+
+    return request(app)
+      .patch("/api/articles/2")
+      .send(updatedVotes)
+      .expect(200)
+      .then(({ body }) => {
+        const updatedArticle = body.article;
+        expect(updatedArticle).toHaveProperty("votes", -5)
+        expect(updatedArticle).toHaveProperty("author", expect.any(String))
+        expect(updatedArticle).toHaveProperty("title", expect.any(String))
+        expect(updatedArticle).toHaveProperty("article_id", expect.any(Number))
+        expect(updatedArticle).toHaveProperty("body", expect.any(String))
+        expect(updatedArticle).toHaveProperty("topic", expect.any(String))
+        expect(updatedArticle).toHaveProperty("created_at", expect.any(String))
+        expect(updatedArticle).toHaveProperty("article_img_url", expect.any(String))
+      })
+  })
+  test("sends an appropriate 404 status and error message when given a valid but non-existent article id", () => {
+    const updatedVotes = { inc_votes: 5 }
+
+    return request(app)
+      .patch("/api/articles/999")
+      .send(updatedVotes)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Article does not exist")
+      })
+  })
+  test("sends an appropriate 400 status and error message when given an invalid article id", () => {
+    const updatedVotes = { inc_votes: 5 };
+
+    return request(app)
+      .patch("/api/articles/invalidarticle")
+      .send(updatedVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad request")
+      })
+  })
+  test("sends an appropriate 400 status and error message when request body is missing", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).toBe("Bad request");
+        })
+    })
+  test("sends an appropriate 400 status and error message when provided object has an incorrect key", () => {
+      const invalidRequestBody = { incorrect_key: 10 };
+  
+      return request(app)
+        .patch("/api/articles/1")
+        .send(invalidRequestBody)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).toBe("Bad request");
+        });
+    });
+})
