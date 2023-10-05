@@ -24,6 +24,7 @@ app.use((err, req, res, next) => {
 
     if (err.code === '42703'){
       res.status(400).send({message: 'Bad request'})
+      
     } else if (err.code === '23502') {
       res.status(400).send({message: 'Missing body or username'})
     }

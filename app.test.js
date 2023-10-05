@@ -194,8 +194,8 @@ describe("POST /api/articles/:article_id/comments", () => {
     .expect(201)
     .then(({body}) => {
       const comment = body.comment[0]
-      expect(comment).toHaveProperty("comment_id", expect.any(Number))
-      expect(comment).toHaveProperty("votes", expect.any(Number))
+      expect(comment).toHaveProperty("comment_id", 19)
+      expect(comment).toHaveProperty("votes", 0)
       expect(comment).toHaveProperty("author", newComment.username)
       expect(comment).toHaveProperty("body", newComment.body)
       expect(comment).toHaveProperty("created_at", expect.any(String))
@@ -244,4 +244,20 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.message).toBe('Missing body or username')
       })
   })
+  test('sends an appropriate 400 status and error message when there are extra keys in the request body', () => {
+    const invalidComment = {
+      username: 'butter_bridge',
+      body: 'Hello World',
+      extraKey: 'This should not be here'
+    };
+  
+    return request(app)
+      .post('/api/articles/1/comments')
+      .send(invalidComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe('Invalid keys in the request body');
+      });
+  });
 })
+
