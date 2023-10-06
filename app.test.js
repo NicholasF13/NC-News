@@ -441,7 +441,7 @@ describe("GET /api/articles with topic query", () => {
 })
 
 
-describe("GET/api/articles/:article_id with comment count", () => {
+describe("GET /api/articles/:article_id with comment count", () => {
   test("returns an article object with the correct properties", () => {
     return request(app)
       .get("/api/articles/1")
@@ -456,6 +456,18 @@ describe("GET/api/articles/:article_id with comment count", () => {
         expect(body.article).toHaveProperty("votes", 100)
         expect(body.article).toHaveProperty("article_img_url", )
         expect(body.article).toHaveProperty("comment_count", '11')
+      })
+  })
+})
+
+describe.only("When user tries to make a request to invalid endpoint", () => {
+  test("returns 404 and error message for invalid endpoint", () => {
+
+    return request(app)
+      .get(`/api/notvalid`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid endpoint");
       })
   })
 })
