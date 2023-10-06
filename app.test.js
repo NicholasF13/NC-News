@@ -460,7 +460,7 @@ describe("GET /api/articles/:article_id with comment count", () => {
   })
 })
 
-describe.only("When user tries to make a request to invalid endpoint", () => {
+describe("When user tries to make a request to invalid endpoint", () => {
   test("returns 404 and error message for invalid endpoint", () => {
 
     return request(app)
