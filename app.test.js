@@ -441,13 +441,12 @@ describe("GET /api/articles with topic query", () => {
 })
 
 
-describe.only("GET/api/articles/:article_id with comment count", () => {
+describe("GET/api/articles/:article_id with comment count", () => {
   test("returns an article object with the correct properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body.article)
         expect(body.article).toHaveProperty("author", 'butter_bridge')
         expect(body.article).toHaveProperty("title", 'Living in the shadow of a great man')
         expect(body.article).toHaveProperty("article_id", 1)
