@@ -6,6 +6,10 @@ The Northcoders News API is a backend service that grants access to the applicat
 
 This API allows users to interact with various endpoints. At the most basic level, these endpoints retrieve information about topics, users, articles & comments. There are also further endpoints that perform specific actions such as adding comments, updating artilces and deleting comments. The API also includes comment counts in article responses which makes it a versatile tool for both end-users and developers.
 
+## Link to hosted version
+
+https://nc-news-mrwy.onrender.com
+
 ## Installation
 
 
