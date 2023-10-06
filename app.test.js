@@ -396,3 +396,46 @@ test("Returns users with the correct format", () => {
     }) 
 }) 
 })
+
+describe("GET /api/articles with topic query", () => {
+  test("returns articles filtered by topic when the topic query parameter is provided", () => {
+    
+
+    return request(app)
+      .get(`/api/articles?topic=mitch`)
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+        expect(articles).toHaveLength(12)
+        articles.forEach((article) => {
+          expect(article).toHaveProperty("author", expect.any(String))
+          expect(article).toHaveProperty("title", expect.any(String))
+          expect(article).toHaveProperty("article_id", expect.any(Number))
+          expect(article).toHaveProperty("topic", 'mitch')
+          expect(article).toHaveProperty("created_at", expect.any(String))
+          expect(article).toHaveProperty("votes", expect.any(Number))
+          expect(article).toHaveProperty("article_img_url", expect.any(String))
+          expect(article).toHaveProperty("comment_count", expect.any(String))
+        })
+      })
+  })
+  test("returns a status of 200 and an empty array if passed a topic with no associated articles", () => {
+
+    return request(app)
+      .get(`/api/articles?topic=paper`)
+      .expect(200)
+      .then(({ body }) => {
+        const articles =body.articles
+        expect(articles).toHaveLength(0)
+      })
+  })
+  test("returns 400 and error message for invalid topic query parameter", () => {
+
+    return request(app)
+      .get(`/api/articles?topic=football`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Topic not found");
+      })
+  })
+})

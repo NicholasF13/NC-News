@@ -12,8 +12,16 @@ function selectArticleById(articleId){
     })
 }
 
-function selectArticles(){
-    return db.query(`SELECT
+function selectArticles(topic){
+
+    const validTopics = ['mitch', 'cats', 'paper']
+
+    if(topic && !validTopics.includes(topic)){
+        return Promise.reject({status: 404, message: 'Topic not found'})
+    }
+
+    let queryStr =`
+    SELECT
     articles.author,
     articles.title,
     articles.article_id,
@@ -25,7 +33,14 @@ function selectArticles(){
     FROM
     articles
     LEFT JOIN
-    comments ON articles.article_id = comments.article_id
+    comments ON articles.article_id = comments.article_id`
+  
+
+    if (topic) {
+        queryStr += ` WHERE articles.topic = $1`
+    }
+
+    queryStr += `
     GROUP BY
     articles.author,
     articles.title,
@@ -35,10 +50,21 @@ function selectArticles(){
     articles.votes,
     articles.article_img_url
     ORDER BY
-    articles.created_at DESC;`)
+    articles.created_at DESC`
+
+  let queryValues;
+
+    if (topic) {
+    queryValues = [topic]
+    } else {
+    queryValues = []
+    }
+
+    return db.query(queryStr, queryValues)
     .then(({rows}) => {
         return rows
     })
+
 }
 
 function selectCommentsById (articleId){

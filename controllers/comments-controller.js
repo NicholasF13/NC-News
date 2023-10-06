@@ -6,7 +6,9 @@ function deleteCommentById(req, res, next){
     .then(() => {
         res.status(204).end()
     })
-    .catch(next)
+    .catch((err) => {
+        next(err)
+    })
 }
 
 module.exports = {deleteCommentById}
