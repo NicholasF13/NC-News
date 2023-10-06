@@ -441,21 +441,22 @@ describe("GET /api/articles with topic query", () => {
 })
 
 
-describe("GET/api/articles/:article_id with comment count", () => {
+describe.only("GET/api/articles/:article_id with comment count", () => {
   test("returns an article object with the correct properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).toHaveProperty("author", expect.any(String))
-        expect(body.article).toHaveProperty("title", expect.any(String))
-        expect(body.article).toHaveProperty("article_id", expect.any(Number))
-        expect(body.article).toHaveProperty("body", expect.any(String))
-        expect(body.article).toHaveProperty("topic", expect.any(String))
-        expect(body.article).toHaveProperty("created_at", expect.any(String))
-        expect(body.article).toHaveProperty("votes", expect.any(Number))
-        expect(body.article).toHaveProperty("article_img_url", expect.any(String))
-        expect(body.article).toHaveProperty("comment_count", expect.any(String))
+        console.log(body.article)
+        expect(body.article).toHaveProperty("author", 'butter_bridge')
+        expect(body.article).toHaveProperty("title", 'Living in the shadow of a great man')
+        expect(body.article).toHaveProperty("article_id", 1)
+        expect(body.article).toHaveProperty("body", 'I find this existence challenging')
+        expect(body.article).toHaveProperty("topic", 'mitch')
+        expect(body.article).toHaveProperty("created_at", '2020-07-09T20:11:00.000Z')
+        expect(body.article).toHaveProperty("votes", 100)
+        expect(body.article).toHaveProperty("article_img_url", )
+        expect(body.article).toHaveProperty("comment_count", '11')
       })
   })
 })
