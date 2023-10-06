@@ -51,14 +51,15 @@ describe("GET/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).toHaveProperty("author")
-        expect(body.article).toHaveProperty("title")
-        expect(body.article).toHaveProperty("article_id")
-        expect(body.article).toHaveProperty("body")
-        expect(body.article).toHaveProperty("topic")
-        expect(body.article).toHaveProperty("created_at")
-        expect(body.article).toHaveProperty("votes")
-        expect(body.article).toHaveProperty("article_img_url")
+        expect(body.article).toHaveProperty("author", expect.any(String))
+        expect(body.article).toHaveProperty("title", expect.any(String))
+        expect(body.article).toHaveProperty("article_id", expect.any(Number))
+        expect(body.article).toHaveProperty("body", expect.any(String))
+        expect(body.article).toHaveProperty("topic", expect.any(String))
+        expect(body.article).toHaveProperty("created_at", expect.any(String))
+        expect(body.article).toHaveProperty("votes", expect.any(Number))
+        expect(body.article).toHaveProperty("article_img_url", expect.any(String))
+        expect(body.article).toHaveProperty("comment_count", expect.any(String))
       })
   })
   test("returns an article with the correct id", () => {
@@ -439,3 +440,4 @@ describe("GET /api/articles with topic query", () => {
       })
   })
 })
+
