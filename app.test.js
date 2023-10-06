@@ -460,6 +460,46 @@ describe("GET /api/articles/:article_id with comment count", () => {
   })
 })
 
+
+
+describe("GET /api/articles with sortby query", () => {
+  test("returns articles sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles
+        expect(articles).toBeSortedBy("created_at", {descending: true})
+      })
+  })
+
+  test("returns articles sorted by date in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles
+        expect(articles).toBeSortedBy("created_at")
+      })
+  })
+  test("returns 400 status with error message for invalid sortby query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=INVALID&order=asc")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid query")
+      })
+  })
+  test("returns 400 status with error message for invalid order query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=INVALID")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Invalid query")
+      })
+  })
+})
+
 describe("When user tries to make a request to invalid endpoint", () => {
   test("returns 404 and error message for invalid endpoint", () => {
 

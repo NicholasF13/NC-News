@@ -13,9 +13,11 @@ function getArticleById(req, res, next){
     })
 }
 
+
 function getArticles(req, res, next){
-    const topic = req.query.topic
-    selectArticles(topic)
+    const {topic} = req.query
+    const {sort_by, order}= req.query
+    selectArticles(topic, sort_by, order)
     .then((articleData) => {
         res.status(200).send({articles: articleData})
     })

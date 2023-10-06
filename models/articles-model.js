@@ -23,12 +23,25 @@ function selectArticleById(articleId){
     })
 }
 
-function selectArticles(topic){
+function selectArticles(topic, sortby = 'created_at', order){
 
     const validTopics = ['mitch', 'cats', 'paper']
 
-    if(topic && !validTopics.includes(topic)){
+    const validSortbys = ['created_at']
+
+    const validOrders = ['asc', 'desc']
+
+   
+    if( topic && !validTopics.includes(topic)){
         return Promise.reject({status: 404, message: 'Topic not found'})
+    }
+
+    if (sortby && !validSortbys.includes(sortby)) {
+        return Promise.reject({ status: 400, message: 'Invalid query' })
+    }
+    
+    if (order && !validOrders.includes(order)) {
+        return Promise.reject({ status: 400, message: 'Invalid query' })
     }
 
     let queryStr =`
@@ -53,15 +66,19 @@ function selectArticles(topic){
 
     queryStr += `
     GROUP BY
-    articles.article_id
-    ORDER BY
-    articles.created_at DESC`
+    articles.article_id`
+
+    if (sortby && order){
+        queryStr += ` ORDER BY ${sortby} ${order}`
+    } else {
+        queryStr += ` ORDER BY articles.created_at DESC`
+    }
 
   let queryValues;
 
     if (topic) {
     queryValues = [topic]
-    } else {
+    }  else {
     queryValues = []
     }
 
