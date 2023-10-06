@@ -228,7 +228,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(invalidComment)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe('Missing body or username')
+        expect(body.message).toBe('Bad request')
       })
   })
   test('sends an appropriate 400 status and error message when username is missing', () => {
@@ -241,7 +241,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(invalidComment)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe('Missing body or username')
+        expect(body.message).toBe('Bad request')
       })
   })
   test('sends an appropriate 400 status and error message when there are extra keys in the request body', () => {

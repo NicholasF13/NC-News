@@ -36,7 +36,6 @@ This can be done using the following commands:
 ```
 npm run setup-dbs
 npm run seed
-
 ```
 
 To run the tests for the express application, use the following command:

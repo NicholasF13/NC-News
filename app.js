@@ -30,19 +30,20 @@ app.get('/api/users', getUsers)
 app.use((err, req, res, next) => {
     console.error(err)
 
-    if (err.code === '42703' || err.code === '22P02'){
+    if (err.code === '42703' || err.code === '22P02' || err.code === '23502'){
       res.status(400).send({message: 'Bad request'})
       
-    } else if (err.code === '23502') {
-      res.status(400).send({message: 'Missing body or username'})
-    }
-    
+    } 
     else if (err.status){
       res.status(err.status).send({message: err.message})
       
     } else {
     res.status(500).send({ message: 'Internal Server Error' })
     }
+  })
+
+  app.all('/*', (req, res, next) => {
+    res.status(404).send({ message: 'Invalid endpoint'})
   })
   
 

@@ -10,10 +10,10 @@ function selectArticleById(articleId){
     articles
     LEFT JOIN
     comments ON articles.article_id = comments.article_id
-    WHERE articles.article_id = ${articleId}
+    WHERE articles.article_id = $1
     GROUP BY 
     articles.article_id
-    ;`)
+    ;`, [articleId])
     .then((data) => {
         if (data.rows.length !== 0) {
             return data.rows[0]
@@ -53,13 +53,7 @@ function selectArticles(topic){
 
     queryStr += `
     GROUP BY
-    articles.author,
-    articles.title,
-    articles.article_id,
-    articles.topic,
-    articles.created_at,
-    articles.votes,
-    articles.article_img_url
+    articles.article_id
     ORDER BY
     articles.created_at DESC`
 
@@ -81,9 +75,9 @@ function selectArticles(topic){
 function selectCommentsById (articleId){
     return db.query(`
     SELECT * FROM comments
-    WHERE comments.article_id = ${articleId}
+    WHERE comments.article_id = $1
     ORDER BY
-    comments.created_at DESC;`)
+    comments.created_at DESC;`, [articleId])
     .then(({rows}) => {
         if(rows.length !== 0){
             return rows
