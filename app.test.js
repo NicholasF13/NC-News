@@ -429,7 +429,7 @@ describe("GET /api/articles with topic query", () => {
         expect(articles).toHaveLength(0)
       })
   })
-  test("returns 400 and error message for invalid topic query parameter", () => {
+  test("returns 404 and error message for invalid topic query parameter", () => {
 
     return request(app)
       .get(`/api/articles?topic=football`)
