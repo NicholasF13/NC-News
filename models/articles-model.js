@@ -25,16 +25,11 @@ function selectArticleById(articleId){
 
 function selectArticles(topic, sortby = 'created_at', order){
 
-    const validTopics = ['mitch', 'cats', 'paper']
 
     const validSortbys = ['created_at']
 
     const validOrders = ['asc', 'desc']
 
-   
-    if( topic && !validTopics.includes(topic)){
-        return Promise.reject({status: 404, message: 'Topic not found'})
-    }
 
     if (sortby && !validSortbys.includes(sortby)) {
         return Promise.reject({ status: 400, message: 'Invalid query' })
