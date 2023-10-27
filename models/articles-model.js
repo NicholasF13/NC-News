@@ -26,7 +26,7 @@ function selectArticleById(articleId){
 function selectArticles(topic, sortby = 'created_at', order){
 
 
-    const validSortbys = ['created_at']
+    const validSortbys = ['created_at', 'comment_count', 'votes']
 
     const validOrders = ['asc', 'desc']
 
