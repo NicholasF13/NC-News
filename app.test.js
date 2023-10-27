@@ -482,6 +482,24 @@ describe("GET /api/articles with sortby query", () => {
         expect(articles).toBeSortedBy("created_at")
       })
   })
+  test("returns articles sorted by comment count in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles
+        expect(articles).toBeSortedBy("comment_count")
+      })
+  })
+  test("returns articles sorted by comment count in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles
+        expect(articles).toBeSortedBy("comment_count", {descending: true})
+      })
+  })
   test("returns 400 status with error message for invalid sortby query", () => {
     return request(app)
       .get("/api/articles?sort_by=INVALID&order=asc")
