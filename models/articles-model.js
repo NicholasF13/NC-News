@@ -28,6 +28,8 @@ function selectArticles(topic, sortby = 'created_at', order){
     
     const validSortbys = ['created_at', 'comment_count', 'votes']
 
+    const validTopics = ['football', 'coding', 'cooking']
+
     const validOrders = ['asc', 'desc']
 
 
@@ -38,6 +40,10 @@ function selectArticles(topic, sortby = 'created_at', order){
     if (order && !validOrders.includes(order)) {
         return Promise.reject({ status: 400, message: 'Invalid query' })
     }
+
+    if (topic && !validTopics.includes(topic)) {
+        return Promise.reject({ status: 404, message: 'Topic not found' });
+      }
 
     let queryStr =`
     SELECT
